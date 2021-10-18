@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,9 +19,12 @@ Route::get('/', function () {
 });
 
 
+
 Auth::routes();
+Route::get('home',[PageController::class, 'index']);
+Route::get('wait',[PageController::class, 'wait'])->name('notadmin');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::get('/admin/home', [HomeController::class, 'adminHome'])->name('admin.home')->middleware('is_admin');
+Route::middleware(['is_admin'])->group(function(){
+    Route::get('admin',[PageController::class, 'admin'])->name('admin');
+});
 
